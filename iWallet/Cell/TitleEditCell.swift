@@ -1,17 +1,19 @@
 //
-//  TitleCell.swift
-//  FamilyWallet
+//  TitleEditCell.swift
+//  iWallet
 //
-//  Created by Grigoriy Sapogov on 30/08/2019.
+//  Created by Grigoriy Sapogov on 02/08/2019.
 //  Copyright © 2019 Grigoriy Sapogov. All rights reserved.
 //
 
 import UIKit
 
-class TitleCell: UITableViewCell {
+class TitleEditCell: UITableViewCell, CellSetupable {
 
     var viewController: UIViewController?
+    
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var textField: UITextField!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -22,28 +24,26 @@ class TitleCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
-}
 
-extension TitleCell: CellSetupable {
-    
     func setup(row: Row) {
         
+        titleLabel.text = row.name
         if row.isPicking && !row.pickerList.isEmpty {
             let pv = PickerView(elements: row.pickerList, viewController: viewController)
             pv.doneClosure = { element in
-                self.titleLabel.text = element?.name
+                self.textField.text = element?.name
+                self.textField.endEditing(true)
             }
             pv.cancelClosure = {
-//                self
+                self.textField.endEditing(true)
             }
-//            textField.inputView = pv
-//            textField.inputAccessoryView = pv.toolbar
-//            textField.borderStyle = .none
-//            textField.textAlignment = .right
-//            textField.text = row.pickerList.first?.name
+            textField.inputView = pv
+            textField.inputAccessoryView = pv.toolbar
+            textField.borderStyle = .none
+            textField.textAlignment = .right
+            textField.text = row.pickerList.first?.name
         }
-        
     }
-    
 }
+
+
