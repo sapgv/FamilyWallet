@@ -13,7 +13,7 @@
 		7C6E288E2319D2B400ACC4FC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C6E288D2319D1C600ACC4FC /* Localizable.strings */; };
 		7C6E28932319D42300ACC4FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C6E28952319D42300ACC4FC /* LaunchScreen.storyboard */; };
 		7C6E28962319D42900ACC4FC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C6E28982319D42900ACC4FC /* Main.storyboard */; };
-		7C6E289B2319D5DD00ACC4FC /* EditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7C6E289D2319D5DD00ACC4FC /* EditCell.xib */; };
+		7C6E28A0231AEA1A00ACC4FC /* EditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7C6E289F231AEA1A00ACC4FC /* EditCell.xib */; };
 		7C8216A1231460DE003D9379 /* WalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8216A0231460DE003D9379 /* WalletViewController.swift */; };
 		7C94698A2313102E009936A8 /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9469892313102E009936A8 /* Application.swift */; };
 		7CA4CABC2318636B00EAB73E /* RightDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4CABA2318636B00EAB73E /* RightDetailCell.swift */; };
@@ -41,7 +41,7 @@
 		7C6E288C2319D1C600ACC4FC /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7C6E28942319D42300ACC4FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7C6E28972319D42900ACC4FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		7C6E289C2319D5DD00ACC4FC /* ru */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ru; path = ru.lproj/EditCell.xib; sourceTree = "<group>"; };
+		7C6E289F231AEA1A00ACC4FC /* EditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditCell.xib; sourceTree = "<group>"; };
 		7C8216A0231460DE003D9379 /* WalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletViewController.swift; sourceTree = "<group>"; };
 		7C9469892313102E009936A8 /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		7CA4CABA2318636B00EAB73E /* RightDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightDetailCell.swift; sourceTree = "<group>"; };
@@ -96,7 +96,7 @@
 				7CECBEDE22F394B60081981D /* TitleEditCell.xib */,
 				7CECBEE422F436F10081981D /* ButtonCell.swift */,
 				7C1DC8C82317123B006E7D68 /* EditCell.swift */,
-				7C6E289D2319D5DD00ACC4FC /* EditCell.xib */,
+				7C6E289F231AEA1A00ACC4FC /* EditCell.xib */,
 				7CECBEE522F436F10081981D /* ButtonCell.xib */,
 				7CECBEE022F394E30081981D /* TitleEditCell.swift */,
 				7CA4CABA2318636B00EAB73E /* RightDetailCell.swift */,
@@ -236,10 +236,10 @@
 				7C6E288E2319D2B400ACC4FC /* Localizable.strings in Resources */,
 				7CA4CABD2318636B00EAB73E /* RightDetailCell.xib in Resources */,
 				7CECBEC322F384940081981D /* Assets.xcassets in Resources */,
+				7C6E28A0231AEA1A00ACC4FC /* EditCell.xib in Resources */,
 				7C6E28932319D42300ACC4FC /* LaunchScreen.storyboard in Resources */,
 				7CECBEDF22F394B60081981D /* TitleEditCell.xib in Resources */,
 				7CA4CAC22318641400EAB73E /* TitleCell.xib in Resources */,
-				7C6E289B2319D5DD00ACC4FC /* EditCell.xib in Resources */,
 				7C6E28962319D42900ACC4FC /* Main.storyboard in Resources */,
 				7CECBEE722F436F10081981D /* ButtonCell.xib in Resources */,
 				7CECBED522F38D580081981D /* HeaderView.xib in Resources */,
@@ -338,14 +338,6 @@
 				7C6E28972319D42900ACC4FC /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		7C6E289D2319D5DD00ACC4FC /* EditCell.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				7C6E289C2319D5DD00ACC4FC /* ru */,
-			);
-			name = EditCell.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
