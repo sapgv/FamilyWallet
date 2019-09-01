@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 private let reuseIdentifier = "Cell"
 
@@ -37,6 +39,7 @@ class VerticalLayout: UICollectionViewFlowLayout {
 class WalletCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
     let headerId = "HeaderView"
+    let disposedBag: DisposeBag = DisposeBag()
     
     class func instance() -> WalletCollectionViewController {
         let layout = VerticalLayout()
@@ -69,28 +72,59 @@ class WalletCollectionViewController: UICollectionViewController, UICollectionVi
         
         print("add")
 //        let addWalletViewController = AddWalletViewController.loadFromNib()
-        let addWalletViewController = AddWalletViewController(style: .grouped)
+        let addWalletViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddWalletViewController") as! AddWalletViewController
+//        let addWalletViewController = AddWalletViewController(style: .grouped)
+        let addWalletViewModel = AddWalletViewModel()
+        
+        addWalletViewController.viewModel = addWalletViewModel
         addWalletViewController.sections([
+            
             Section(rows: [
                 RowBuilder<EditRow>()
+                    .setName("Name")
+                    .setTitle("Name")
                     .setPlaceholder("Name")
                     .setHeight(64)
                     .build(),
                 RowBuilder<EditRow>()
                     .setName("Currency")
-                    .pickerList(Currency.currencies)
-                    .setHeight(64)
-                    .build()
-                
-                ]),
-            Section(rows: [
-                RowBuilder<EditRow>()
-                    .setName("Currency")
+                    .setPlaceholder("Currency")
                     .pickerList(Currency.currencies)
                     .setHeight(64)
                     .build()
                 
                 ])
+            
+            
+//            Section(rows: [
+//                RowBuilder<EditRow>()
+//                    .setPlaceholder("Name")
+//                    .setHeight(64)
+//                    .bind { row in
+//
+//                        row.value.bind(onNext: { text in
+//                            addWalletViewModel.name = text
+//                        }).disposed(by: disposedBag)
+//
+//                    }
+//                    .build(),
+//                RowBuilder<EditRow>()
+//                    .setPlaceholder("Currency")
+//                    .pickerList(Currency.currencies)
+//                    .setHeight(64)
+//                    .bind { row in
+//
+//                        row.pickedElement.bind(onNext: { picked in
+//                            addWalletViewModel.currency = Currency(name: picked.name)
+//                        }).disposed(by: disposedBag)
+////                        Observable.just(row.pickedElement).bind(onNext: { picked in
+////                            addWalletViewModel.currency = Currency(name: picked?.name ?? "")
+////                        }).disposed(by: disposedBag)
+//
+//                    }
+//                    .build()
+//
+//                ])
         ])
         navigationController?.pushViewController(addWalletViewController, animated: true)
     }

@@ -6,15 +6,22 @@
 //  Copyright © 2019 Grigoriy Sapogov. All rights reserved.
 //
 
-import Foundation
 import UIKit
+import RxCocoa
+import RxSwift
+import RxDataSources
 
 class RowBuilder<T: Row> {
     
     private var row: T = T.init()
     
     func setName(_ name: String) -> Self {
-        row.name = name.localized
+        row.name = name
+        return self
+    }
+    
+    func setTitle(_ title: String) -> Self {
+        row.title = title.localized
         return self
     }
     
@@ -39,6 +46,16 @@ class RowBuilder<T: Row> {
         return self
     }
 
+    func select(onSelect: ((_ tableView: UITableView, _ indexPath: IndexPath) -> Void)? = nil) -> Self {
+        row.select = onSelect
+        return self
+    }
+    
+    func bind(_ completion: (T) -> Void) -> Self {
+        completion(row)
+        return self
+    }
+    
     func build() -> T {
         return row
     }
@@ -49,18 +66,27 @@ class RowBuilder<T: Row> {
 protocol BaseRow {
     var id: String { get set }
     var name: String { get set }
+    var title: String { get set }
     var placeholder: String { get set }
     var height: CGFloat { get set }
     var isPicking: Bool { get set }
     var pickerList: [PickerElement] { get set }
     var cellType: CellType { get }
     var select: ((_ tableView: UITableView, _ indexPath: IndexPath) -> Void)? { get set }
+    
+    //Rx
+    var value: BehaviorRelay<String> { get set }
+    var pickedElement: ReplaySubject<PickerElement> { get set }
+    
 }
+
+
 
 class Row: BaseRow {
     
     var id: String = String.uuid
     var name: String = ""
+    var title: String = ""
     var placeholder: String = ""
     var height: CGFloat = 44
     var isPicking: Bool = false
@@ -70,9 +96,10 @@ class Row: BaseRow {
     }
     var select: ((_ tableView: UITableView, _ indexPath: IndexPath) -> Void)?
     
-    required init(_ name: String = String.uuid) {
-        self.name = name
-    }
+    var value: BehaviorRelay<String> = BehaviorRelay<String>(value: "")
+    var pickedElement: ReplaySubject<PickerElement> = ReplaySubject<PickerElement>.create(bufferSize: 1)
+    
+    required init() {}
 }
 
 class TitleRow: Row {

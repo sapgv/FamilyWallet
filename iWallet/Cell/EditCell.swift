@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 protocol CellSetupable {
     
@@ -17,6 +19,8 @@ protocol CellSetupable {
 class EditCell: UITableViewCell, CellSetupable {
 
     @IBOutlet weak var textField: UITextField!
+    var disposedBag: DisposeBag = DisposeBag()
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -30,14 +34,15 @@ class EditCell: UITableViewCell, CellSetupable {
     
     func setup(row: Row) {
         textField.placeholder = row.placeholder
+
+        textField.rx.text.orEmpty.bind(to: row.value).disposed(by: disposedBag)
         if row.isPicking {
             textField.tintColor = .clear
             let picker = PickerView(elements: row.pickerList, control: textField)
             picker.doneClosure = { picked in
-                self.textField.text = picked?.name
+                self.textField.text = picked?.name ?? row.pickerList.first?.name
+                self.textField.rx.text.orEmpty.bind(to: row.value).disposed(by: self.disposedBag)
             }
-           
-            
             
             let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 36, height: textField.bounds.height))
             
@@ -50,9 +55,8 @@ class EditCell: UITableViewCell, CellSetupable {
             textField.rightViewMode = .always
             textField.inputView = picker
             textField.inputAccessoryView = picker.toolbar
-            textField.text = row.pickerList.first?.name
             textField.textAlignment = .right
-            textField.text = row.pickerList.first?.name
         }
     }
+    
 }

@@ -25,6 +25,11 @@ class Currency: Object, PickerElement {
             Currency(name: "USD"),
             ]
     }
+    
+    static var standart: Currency! {
+        return currencies.first
+    }
+    
 }
 
 class Wallet: Object {

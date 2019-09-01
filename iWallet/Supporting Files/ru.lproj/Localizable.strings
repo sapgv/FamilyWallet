@@ -6,3 +6,5 @@
   Copyright © 2019 Grigoriy Sapogov. All rights reserved.
 */
 "Name" = "Наименование";
+"Currency" = "Валюта";
+"Save" = "Сохранить";
