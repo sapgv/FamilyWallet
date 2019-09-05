@@ -11,27 +11,6 @@ import RxCocoa
 import RxSwift
 import RxDataSources
 
-class TableViewControllerBuilder<T: TableViewController> {
-    
-    private var viewController: T
-    
-    init(viewController: T) {
-        self.viewController = viewController
-    }
-    
-    func sections(_ sections: [Section]) -> Self {
-        viewController.sections = sections
-        return self
-    }
-    
-}
-
-protocol TableViewController {
-    
-    var sections: [Section] { get set }
-    
-}
-
 extension AddWalletViewController {
     
     static func dataSource() -> RxTableViewSectionedAnimatedDataSource<Section> {
@@ -46,11 +25,17 @@ extension AddWalletViewController {
     
     
 }
+
+class SaveButton: UIBarButtonItem {
+    
+}
+
 class AddWalletViewController: UITableViewController, TableViewController {
     
     var viewModel: AddWalletViewModel!
     var sections: [Section] = []
     private var disposeBag: DisposeBag = DisposeBag()
+    private var saveButton: UIBarButtonItem!
     
     func sections(_ sections: [Section]) {
         self.sections = sections
@@ -61,48 +46,61 @@ class AddWalletViewController: UITableViewController, TableViewController {
         
         tableView.dataSource = nil
         
+        saveButton = UIBarButtonItem(title: "Save", style: .done, target: nil, action: nil)
+        navigationItem.rightBarButtonItem = saveButton
+        
         registerKeyboardHide()
-        setupNavigationBar()
         setupTableView()
         bindUI()
         
     }
     
     private func setupNavigationBar() {
-        let saveButton = UIBarButtonItem(title: "Save".localized, style: .done, target: self, action: #selector(save(sender:)))
+        saveButton = SaveButton(title: "Save", style: .done, target: nil, action: nil)
         navigationItem.rightBarButtonItem = saveButton
     }
     
     private func setupTableView() {
         tableView.register(cellType: .Edit)
-        tableView.register(cellType: .TitleEdit)
-        tableView.register(cellType: .Button)
     }
     
     private func bindUI() {
 
-        let dataSource = AddWalletViewController.dataSource()
+        let saveTrigger = saveButton.rx.tap.asDriver()
         
-        let rows = sections.flatMap{ $0.rows }
-        let walletDriver: Driver<String> = rows.first { $0.name == "Name" }!.value.asDriver()
-        let currencyDriver: Driver<String> = rows.first { $0.name == "Currency" }!.value.asDriver()
-
-        let input = AddWalletViewModel.Input(walletName: walletDriver, currency: currencyDriver)
+        let input = AddWalletViewModel.Input(saveTrigger: saveTrigger)
+        
         let output = viewModel.transform(input: input)
         
-        output.saveEnabled.drive(onNext: { [unowned self] saveEnabled in
-            self.navigationItem.rightBarButtonItem?.isEnabled = saveEnabled
-        }).disposed(by: disposeBag)
-        
-        Observable.just(sections)
-            .bind(to: tableView.rx.items(dataSource: dataSource))
+        output.dismiss
+            .drive()
             .disposed(by: disposeBag)
         
-    }
-    
-    @objc func save(sender: AnyObject) {
         
-        print("save")
+//        output.text.asObservable().subscribe(onNext: { (text) in
+//            print(text)
+//        })
+        
+//        let dataSource = AddWalletViewController.dataSource()
+//
+//        let saveDr = navigationItem.rightBarButtonItem!.rx.tap.asDriver()
+//
+//        let input = AddWalletViewModel.Input(saveTrigger: saveDr)
+//        viewModel.transform(input: input)
+//
+////        let rows = sections.flatMap{ $0.rows }
+////        let walletDriver: Driver<String> = rows.first { $0.name == "Name" }!.value.asDriver()
+////        let currencyDriver: Driver<String> = rows.first { $0.name == "Currency" }!.value.asDriver()
+////        let saveDriver: Driver<Void> = saveButton.rx.tap.asDriver()
+////
+////        let input = AddWalletViewModel.Input(walletName: walletDriver, currency: currencyDriver, saveDriver: saveDriver)
+////        let output = viewModel.transform(input: input)
+////
+////        output.saveEnabled.drive(saveButton.rx.isEnabled).disposed(by: disposeBag)
+//
+//        Observable.just(sections)
+//            .bind(to: tableView.rx.items(dataSource: dataSource))
+//            .disposed(by: disposeBag)
         
     }
     

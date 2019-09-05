@@ -16,36 +16,17 @@ final class Application {
     
     func configure(in window: UIWindow) {
     
-        let walletCollectionViewController = WalletCollectionViewController.instance()
-        let naviagtionController = UINavigationController(rootViewController: walletCollectionViewController)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let navigationController = UINavigationController()
+        let walletsNavigator = DefaultWalletsNavigator(navigationController: navigationController, storyboard: storyboard)
+        walletsNavigator.wallets()
         
         
-        
-        
-        
-        window.rootViewController = naviagtionController
+        window.rootViewController = navigationController
         window.makeKeyAndVisible()
         
         
     }
-    
-    func run() {
-        
-        let walletCollectionViewController = WalletCollectionViewController.instance()
-        let naviagtionController = UINavigationController(rootViewController: walletCollectionViewController)
-        
-        
-        
-        
-        
-        let window = UIWindow(frame: UIScreen.main.bounds)
-        window.rootViewController = naviagtionController
-        window.makeKeyAndVisible()
-        
-    }
-    
-    
-    
-    
     
 }

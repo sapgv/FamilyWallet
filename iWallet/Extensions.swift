@@ -44,3 +44,30 @@ extension String {
         return NSLocalizedString(self, tableName: tableName, value: "**\(self)**", comment: "")
     }
 }
+
+
+extension UIStoryboard {
+    
+    func instatiateViweController<T>(from type: T.Type = T.self) -> T where T: UIViewController {
+        
+        guard let viewController = self.instantiateViewController(withIdentifier: T.reuseID) as? T else {
+            fatalError()
+        }
+        return viewController
+    }
+    
+}
+
+protocol Reusable {
+    static var reuseID: String { get }
+}
+
+extension Reusable {
+    static var reuseID: String {
+        return String(describing: self)
+    }
+}
+
+extension UIViewController: Reusable {}
+
+

@@ -10,52 +10,61 @@ import Foundation
 import RealmSwift
 import RxSwift
 import RxCocoa
+import RxRealm
 
 class AddWalletViewModel {
+
+    private let navigator: AddWalletNavigator
     
     var name: BehaviorRelay<String>
     var currency: Currency
     var currencies: [Currency] = Currency.currencies
-    
+
     struct Input {
-        let walletName: Driver<String>
-        let currency: Driver<String>
+        let saveTrigger: Driver<Void>
     }
-    
+
     struct Output {
-        let saveEnabled: Driver<Bool>
+        let dismiss: Driver<Void>
     }
     
-    init(name: BehaviorRelay<String> = BehaviorRelay<String>(value: ""), currency: Currency = Currency.standart) {
+    init(name: BehaviorRelay<String> = BehaviorRelay<String>(value: ""), currency: Currency = Currency.standart, navigator: AddWalletNavigator) {
         self.name = name
         self.currency = currency
+        self.navigator = navigator
     }
     
-    func save() {
-        let realm = try! Realm()
+    func save(wallet: Wallet) -> Observable<Void> {
         
-//        let wallet = Wallet(name: name, currency: currency)
-//        try! realm.write {
-//            realm.add(wallet)
-//        }
+        let obs = Observable.just(wallet).map { wallet in
+            let realm = try! Realm()
+            try! realm.write {
+                realm.add(wallet)
+            }
+        }.mapToVoid()
+        
+        return obs
         
     }
     
     func transform(input: Input) -> Output {
-
-        let saveEnabled: Driver<Bool> = Driver.combineLatest(input.walletName, input.currency) { name, currency in
-            return !name.isEmpty && !currency.isEmpty
-        }.startWith(false)
-        
-//        let saveEnabled: Driver<Bool> = input.walletName.map { name in
-//            return !name.isEmpty
-//        }.startWith(false)
     
+
+        let save = input.saveTrigger.flatMapLatest { _ in
+            Observable.of(()).asDriverOnErrorJustComplete()
+        }
+
+        let dismiss = Driver.of(save)
+                    .merge()
+                    .do(onNext: { _ in
+                        self.navigator.toWallets()
+                    })
         
-//        let saveEnabled: Driver<Bool> = name.asDriver().map { !$0.isEmpty }
-        return Output(saveEnabled: saveEnabled)
+        return Output(dismiss: dismiss)
         
     }
+    
+    
     
     
     

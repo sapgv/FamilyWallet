@@ -24,14 +24,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Application.shared.configure(in: window)
         
         self.window = window
-//        let frame = UIScreen.main.bounds
-//        window = UIWindow(frame: frame)
-//        window?.makeKeyAndVisible()
-//
-//        let walletCollectionViewController = WalletCollectionViewController.instance()
-//        let nc = UINavigationController(rootViewController: walletCollectionViewController)
-//
-//        window?.rootViewController = nc
         return true
     }
 
