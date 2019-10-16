@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxDataSources
 
 private let reuseIdentifier = "Cell"
 
@@ -42,10 +43,23 @@ class WalletsCollectionViewController: UICollectionViewController, UICollectionV
     private var createWalletButton: UIBarButtonItem!
     private let headerId = "HeaderView"
     private let disposeBag: DisposeBag = DisposeBag()
+    private var dataSource: RxCollectionViewSectionedAnimatedDataSource<CollectionSection> = RxCollectionViewSectionedAnimatedDataSource<CollectionSection>(configureCell: { (ds, cv, ip, item) in
+        
+        let cell = cv.deque(item: item, indexPath: ip)
+        (cell as? CollectionCellSetupable)?.setup(item: item)
+        cell.layer.cornerRadius = 5
+        return cell
+        
+    },configureSupplementaryView: { (ds, cv, title, ip) in
+        let headerView = cv.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "HeaderView", for: ip) as! HeaderView
+        headerView.nameLabel.text = "Wallets".localized
+        headerView.layer.cornerRadius = 5
+              return headerView
+    }
+    )
     
     class func instance() -> WalletsCollectionViewController {
         let layout = VerticalLayout()
-        layout.sectionHeadersPinToVisibleBounds = true
         let controller = WalletsCollectionViewController(collectionViewLayout: layout)
         return controller
     }
@@ -63,116 +77,66 @@ class WalletsCollectionViewController: UICollectionViewController, UICollectionV
 
     private func setupCollectionView() {
         
+        collectionView.refreshControl = UIRefreshControl()
+        collectionView.dataSource = nil
         // Register cell classes
-        self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        self.collectionView!.register(UINib(nibName: headerId, bundle: nil), forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
+        collectionView.register(type: .TitleCollectionCell)
+        collectionView!.register(UINib(nibName: headerId, bundle: nil), forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerId)
         
-        collectionView.backgroundColor = .red
-        
+        collectionView.backgroundColor = .systemTeal
+        collectionView.contentInset = UIEdgeInsets(top: 16, left: 8, bottom: 0, right: 8)
+
     }
     
     private func setupNavigationBar() {
-        createWalletButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(add))
+        createWalletButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
         navigationItem.rightBarButtonItem = createWalletButton
     }
     
     private func bindUI() {
         
-        let input = WalletsViewModel.Input(createWalletTrigger: createWalletButton.rx.tap.asDriver())
+        let viewWillAppear = rx.sentMessage(#selector(Self.viewWillAppear(_:))).asDriverOnErrorJustComplete().mapToVoid()
+        let pull = collectionView.refreshControl!.rx.controlEvent(.valueChanged).asDriverOnErrorJustComplete().mapToVoid()
+        
+        let refreshTrigger = Driver.merge(viewWillAppear, pull)
+        
+        let input = WalletsViewModel.Input(refreshTrigger: refreshTrigger, createWalletTrigger: createWalletButton.rx.tap.asDriver(), selectWalletTrigger: collectionView.rx.itemSelected.asDriver())
         
         let output = viewModel.transform(input: input)
+        
+        output.fetching
+            .drive(collectionView.refreshControl!.rx.isRefreshing)
+            .disposed(by: disposeBag)
         
         output.createWallet
             .drive()
             .disposed(by: disposeBag)
         
-    }
-    
-    
-    
-    
-    @objc func add(sender: Any) {
+        output.walletsSections
+            .drive(collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
         
-//        print("add")
-////        let addWalletViewController = AddWalletViewController.loadFromNib()
-//        let addWalletViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddWalletViewController") as! AddWalletViewController
-////        let addWalletViewController = AddWalletViewController(style: .grouped)
-//
-//        let navigator = DefaultAddWalletNavigator(<#T##navigationController: UINavigationController##UINavigationController#>)
-//        let addWalletViewModel = AddWalletViewModel(navigator: <#T##AddWalletNavigator#>)
-//
-//        addWalletViewController.viewModel = addWalletViewModel
-//        addWalletViewController.sections([
-//
-//            Section(rows: [
-//                RowBuilder<EditRow>()
-//                    .setName("Name")
-//                    .setTitle("Name")
-//                    .setPlaceholder("Name")
-//                    .setHeight(64)
-//                    .build(),
-//                RowBuilder<EditRow>()
-//                    .setName("Currency")
-//                    .setPlaceholder("Currency")
-//                    .pickerList(Currency.currencies)
-//                    .setHeight(64)
-//                    .build()
-//
-//                ])
-//
-//
-//        ])
-//        navigationController?.pushViewController(addWalletViewController, animated: true)
+        output.selected
+            .drive()
+            .disposed(by: disposeBag)
+        
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-    // MARK: UICollectionViewDataSource
-
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 2
-    }
-
-
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return wallets.count
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-    
-        // Configure the cell
-        cell.backgroundColor = .blue
-        return cell
-    }
-
     // MARK: UICollectionViewDelegateFlowLayout
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let w = UIScreen.main.bounds.width
-        return CGSize(width: w, height: 44)
+        return CGSize(width: w - 16, height: 150)
     }
     
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! HeaderView
-        headerView.nameLabel.text = "wallet"
-        headerView.frame.size.height = 100
-        return headerView
-    }
-
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: UIScreen.main.bounds.width, height: 100)
+        let w = UIScreen.main.bounds.width
+        return CGSize(width: w - 16, height: 50)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
+    }
+    
     
 }

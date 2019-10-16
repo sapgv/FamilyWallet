@@ -13,7 +13,11 @@ import RxDataSources
 
 class RowBuilder<T: Row> {
     
-    private var row: T = T.init()
+    private var row: T
+    
+    init(_ type: T.Type) {
+        row = T.init()
+    }
     
     func setName(_ name: String) -> Self {
         row.name = name
@@ -48,6 +52,11 @@ class RowBuilder<T: Row> {
 
     func select(onSelect: ((_ tableView: UITableView, _ indexPath: IndexPath) -> Void)? = nil) -> Self {
         row.select = onSelect
+        return self
+    }
+    
+    func setValue(_ value: String) -> Self {
+        row.value.accept(value)
         return self
     }
     
@@ -108,11 +117,16 @@ class TitleRow: Row {
         return .Title
     }
     
-    convenience init(name: String = "", isPicking: Bool = false, pickerList: [PickerElement] = [], select: ((_ tableView: UITableView, _ indexPath: IndexPath) -> Void)? = nil) {
-        self.init(name: name)
+    init(name: String = "", isPicking: Bool = false, pickerList: [PickerElement] = [], select: ((_ tableView: UITableView, _ indexPath: IndexPath) -> Void)? = nil) {
+        super.init()
+        self.name = name
         self.isPicking = isPicking
         self.pickerList = pickerList
         self.select = select
+    }
+    
+    required init() {
+        fatalError("init() has not been implemented")
     }
 }
 
@@ -133,15 +147,27 @@ class RightDetailRow: Row {
 }
 class TitleEditRow: Row {
     
-    convenience init(name: String = "", isPicking: Bool = false, pickerList: [PickerElement] = []) {
-        self.init(name: name)
+    init(name: String = "", isPicking: Bool = false, pickerList: [PickerElement] = []) {
+        super.init()
+        self.name = name
         self.isPicking = isPicking
         self.pickerList = pickerList
+    }
+    
+    required init() {
+        fatalError("init() has not been implemented")
     }
     
     override var cellType: CellType {
         return .TitleEdit
     }
     
+}
+
+class PikedRow: Row {
+    
+    override var cellType: CellType {
+        return .Picked
+    }
 }
 

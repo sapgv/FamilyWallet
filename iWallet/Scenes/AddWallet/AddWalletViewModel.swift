@@ -15,52 +15,54 @@ import RxRealm
 class AddWalletViewModel {
 
     private let navigator: AddWalletNavigator
+    private var addWalletUseCase: AddWalletUseCase
     
-    var name: BehaviorRelay<String>
-    var currency: Currency
-    var currencies: [Currency] = Currency.currencies
-
     struct Input {
+        let walletName: PublishSubject<String>
+        let currencyName: PublishSubject<String>
+        let cancelTrigger: Driver<Void>
         let saveTrigger: Driver<Void>
     }
 
     struct Output {
         let dismiss: Driver<Void>
+        let sections: Driver<[TableSection]>
+        let saveEnabled: Driver<Bool>
     }
     
-    init(name: BehaviorRelay<String> = BehaviorRelay<String>(value: ""), currency: Currency = Currency.standart, navigator: AddWalletNavigator) {
-        self.name = name
-        self.currency = currency
+    init(navigator: AddWalletNavigator, addWalletUseCase: AddWalletUseCase) {
         self.navigator = navigator
-    }
-    
-    func save(wallet: Wallet) -> Observable<Void> {
-        
-        let obs = Observable.just(wallet).map { wallet in
-            let realm = try! Realm()
-            try! realm.write {
-                realm.add(wallet)
-            }
-        }.mapToVoid()
-        
-        return obs
-        
+        self.addWalletUseCase = addWalletUseCase
     }
     
     func transform(input: Input) -> Output {
     
+        let nameAndCurrency = Driver.combineLatest(input.walletName.asDriverOnErrorJustComplete(), input.currencyName.asDriverOnErrorJustComplete())
+        
+        let save = input.saveTrigger
+            .withLatestFrom(nameAndCurrency)
+            .map { nameAndCurrency in
+                return Wallet(name: nameAndCurrency.0, currency: Currency(name: nameAndCurrency.1))
+            }.flatMapLatest { [unowned self] (wallet: Wallet) in
+                return self.addWalletUseCase.save(wallet: wallet).asDriverOnErrorJustComplete()
+            }
+        
 
-        let save = input.saveTrigger.flatMapLatest { _ in
-            Observable.of(()).asDriverOnErrorJustComplete()
-        }
-
-        let dismiss = Driver.of(save)
+        let dismiss = Driver.of(save, input.cancelTrigger)
                     .merge()
                     .do(onNext: { _ in
                         self.navigator.toWallets()
                     })
         
-        return Output(dismiss: dismiss)
+        let sections = addWalletUseCase
+                .sections(with: Currency.standart)
+                .asDriverOnErrorJustComplete()
+
+        let saveEnabled = nameAndCurrency.map { name, currency in
+            return !name.isEmpty && !currency.isEmpty
+        }
+        
+        return Output(dismiss: dismiss, sections: sections, saveEnabled: saveEnabled)
         
     }
     

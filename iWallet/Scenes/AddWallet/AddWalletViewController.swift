@@ -11,64 +11,71 @@ import RxCocoa
 import RxSwift
 import RxDataSources
 
-extension AddWalletViewController {
-    
-    static func dataSource() -> RxTableViewSectionedAnimatedDataSource<Section> {
-        return RxTableViewSectionedAnimatedDataSource<Section>(configureCell: { (ds, tv, ip, row)  in
-
-            let cell = tv.deque(row: row, indexPath: ip)
-            (cell as? CellSetupable)?.setup(row: row)
-            return cell
-
-        })
-    }
-    
-    
-}
-
-class SaveButton: UIBarButtonItem {
-    
-}
-
-class AddWalletViewController: UITableViewController, TableViewController {
+class AddWalletViewController: UITableViewController {
     
     var viewModel: AddWalletViewModel!
-    var sections: [Section] = []
     private var disposeBag: DisposeBag = DisposeBag()
+    private var cancelButton: UIBarButtonItem!
     private var saveButton: UIBarButtonItem!
+    lazy private var dataSource: RxTableViewSectionedAnimatedDataSource<TableSection> = RxTableViewSectionedAnimatedDataSource<TableSection>(configureCell: { [walletName, currencyName, disposeBag] (ds, tv, ip, row) in
+        
+        let cell = tv.deque(row: row, indexPath: ip)
+        (cell as? CellSetupable)?.setup(row: row)
+        
+        switch row.name {
+            
+        case "Name":
+            (cell as? EditCell)?.textField.becomeFirstResponder()
+            row.value.bind(to: walletName).disposed(by: disposeBag)
+//            row.value.asDriver().drive(walletSubject).disposed(by: disposeBag)
+        case "Currency":
+            row.value.bind(to: currencyName).disposed(by: disposeBag)
+//            row.value.asDriver().drive(currencySubject).disposed(by: disposeBag)
+        default:
+            break
+        }
+        
+        return cell
+        
+        
+    }, titleForHeaderInSection: { ds, section in
+        return ds.sectionModels[section].headerDescription.localized
+    })
     
-    func sections(_ sections: [Section]) {
-        self.sections = sections
-    }
+    var walletName: PublishSubject<String> = PublishSubject<String>()
+    var currencyName: PublishSubject<String> = PublishSubject<String>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.dataSource = nil
-        
-        saveButton = UIBarButtonItem(title: "Save", style: .done, target: nil, action: nil)
-        navigationItem.rightBarButtonItem = saveButton
-        
         registerKeyboardHide()
+        setupNavigationBar()
         setupTableView()
         bindUI()
         
     }
     
     private func setupNavigationBar() {
-        saveButton = SaveButton(title: "Save", style: .done, target: nil, action: nil)
+        cancelButton = UIBarButtonItem(title: "Cancel".localized, style: .plain, target: nil, action: nil)
+        navigationItem.backBarButtonItem = cancelButton
+        
+        saveButton = UIBarButtonItem(title: "Save".localized, style: .done, target: nil, action: nil)
         navigationItem.rightBarButtonItem = saveButton
     }
     
     private func setupTableView() {
+        tableView.dataSource = nil
+        tableView.delegate = self
         tableView.register(cellType: .Edit)
+        tableView.register(cellType: .Picked)
     }
     
     private func bindUI() {
 
+        let cancelTrigger = cancelButton.rx.tap.asDriver()
         let saveTrigger = saveButton.rx.tap.asDriver()
         
-        let input = AddWalletViewModel.Input(saveTrigger: saveTrigger)
+        let input = AddWalletViewModel.Input(walletName: walletName, currencyName: currencyName, cancelTrigger: cancelTrigger, saveTrigger: saveTrigger)
         
         let output = viewModel.transform(input: input)
         
@@ -76,45 +83,17 @@ class AddWalletViewController: UITableViewController, TableViewController {
             .drive()
             .disposed(by: disposeBag)
         
+        output.sections
+            .drive(tableView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
         
-//        output.text.asObservable().subscribe(onNext: { (text) in
-//            print(text)
-//        })
-        
-//        let dataSource = AddWalletViewController.dataSource()
-//
-//        let saveDr = navigationItem.rightBarButtonItem!.rx.tap.asDriver()
-//
-//        let input = AddWalletViewModel.Input(saveTrigger: saveDr)
-//        viewModel.transform(input: input)
-//
-////        let rows = sections.flatMap{ $0.rows }
-////        let walletDriver: Driver<String> = rows.first { $0.name == "Name" }!.value.asDriver()
-////        let currencyDriver: Driver<String> = rows.first { $0.name == "Currency" }!.value.asDriver()
-////        let saveDriver: Driver<Void> = saveButton.rx.tap.asDriver()
-////
-////        let input = AddWalletViewModel.Input(walletName: walletDriver, currency: currencyDriver, saveDriver: saveDriver)
-////        let output = viewModel.transform(input: input)
-////
-////        output.saveEnabled.drive(saveButton.rx.isEnabled).disposed(by: disposeBag)
-//
-//        Observable.just(sections)
-//            .bind(to: tableView.rx.items(dataSource: dataSource))
-//            .disposed(by: disposeBag)
+        output.saveEnabled.drive(saveButton.rx.isEnabled).disposed(by: disposeBag)
         
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return sections[indexPath.section].rows[indexPath.row].height
+        return dataSource.sectionModels[indexPath.section].rows[indexPath.row].height
     }
-    
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sections[section].headerDescription
-    }
-    
-    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        return sections[section].footerDescription
-    }
-    
+
 }
 

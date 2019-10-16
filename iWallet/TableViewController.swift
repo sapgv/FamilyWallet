@@ -16,7 +16,7 @@ class TableViewControllerBuilder<T: TableViewController> {
         self.viewController = viewController
     }
     
-    func sections(_ sections: [Section]) -> Self {
+    func sections(_ sections: [TableSection]) -> Self {
         viewController.sections = sections
         return self
     }
@@ -25,6 +25,6 @@ class TableViewControllerBuilder<T: TableViewController> {
 
 protocol TableViewController {
     
-    var sections: [Section] { get set }
+    var sections: [TableSection] { get set }
     
 }

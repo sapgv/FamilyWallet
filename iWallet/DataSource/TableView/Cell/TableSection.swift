@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import RxDataSources
 
-struct Section {
+struct TableSection {
     
     var name: String = String.uuid
     var headerDescription: String
@@ -26,7 +26,7 @@ struct Section {
     
 }
 
-extension Section: AnimatableSectionModelType {
+extension TableSection: AnimatableSectionModelType {
     
     typealias Identity = String
     typealias Item = Row
@@ -39,7 +39,7 @@ extension Section: AnimatableSectionModelType {
         return rows
     }
     
-    init(original: Section, items: [Item]) {
+    init(original: TableSection, items: [Item]) {
         self = original
         self.rows = items
     }

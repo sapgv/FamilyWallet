@@ -18,10 +18,13 @@ final class Application {
     
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         
-        let navigationController = UINavigationController()
-        let walletsNavigator = DefaultWalletsNavigator(navigationController: navigationController, storyboard: storyboard)
-        walletsNavigator.wallets()
+//        let navigationController = UINavigationController()
+//        let walletsNavigator = DefaultWalletsNavigator(navigationController: navigationController, storyboard: storyboard)
+//        walletsNavigator.wallets()
         
+        let navigationController = UINavigationController()
+        let tabsNavigator = DefaultTabsNavigator(navigationController: navigationController, storyboard: storyboard)
+        tabsNavigator.toTabs()
         
         window.rootViewController = navigationController
         window.makeKeyAndVisible()

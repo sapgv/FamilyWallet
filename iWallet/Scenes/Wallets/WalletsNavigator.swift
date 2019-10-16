@@ -13,7 +13,7 @@ protocol WalletsNavigator {
     
     func wallets()
     func createWallet()
-    
+    func toWallet(wallet: Wallet)
 }
 
 final class DefaultWalletsNavigator: WalletsNavigator {
@@ -28,7 +28,8 @@ final class DefaultWalletsNavigator: WalletsNavigator {
     
     func wallets() {
         
-        let viewModel = WalletsViewModel(navigator: self)
+        let walletsUseCase = WalletsUseCase()
+        let viewModel = WalletsViewModel(navigator: self, walletsUseCase: walletsUseCase)
         let walletsCollectionViewController = WalletsCollectionViewController.instance()
         walletsCollectionViewController.viewModel = viewModel
         navigationController.pushViewController(walletsCollectionViewController, animated: true)
@@ -39,12 +40,25 @@ final class DefaultWalletsNavigator: WalletsNavigator {
     func createWallet() {
         
         let navigator = DefaultAddWalletNavigator(navigationController)
-        let viewModel = AddWalletViewModel(navigator: navigator)
+        let addWalletUseCase = AddWalletUseCase()
+        let viewModel = AddWalletViewModel(navigator: navigator, addWalletUseCase: addWalletUseCase)
         let viewController = storyboard.instatiateViweController(from: AddWalletViewController.self)
         viewController.viewModel = viewModel
         
         navigationController.pushViewController(viewController, animated: true)
     }
     
+    func toWallet(wallet: Wallet) {
+        
+    }
     
+    
+    
+//    func toPost(_ post: Post) {
+//        let navigator = DefaultEditPostNavigator(navigationController: navigationController)
+//        let viewModel = EditPostViewModel(post: post, useCase: services.makePostsUseCase(), navigator: navigator)
+//        let vc = storyBoard.instantiateViewController(ofType: EditPostViewController.self)
+//        vc.viewModel = viewModel
+//        navigationController.pushViewController(vc, animated: true)
+//    }
 }

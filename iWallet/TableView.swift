@@ -24,6 +24,7 @@ enum CellType: String {
     case TitleEdit = "TitleEditCell"
     case Button = "ButtonCell"
     case RightDetail = "RightDetailCell"
+    case Picked = "PickedCell"
 }
 
 extension UITableView: TableView {
