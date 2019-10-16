@@ -6,13 +6,29 @@
 //  Copyright © 2019 Grigoriy Sapogov. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
-final class SettingsViewController {
+class SettingsViewController: UITableViewController {
     
+    var viewModel: SettingsViewModel!
+    private var saveButton: UIBarButtonItem!
+   
+    override func viewDidLoad() {
+        
+        setupNavigationBar()
+        setupTableView()
+    }
     
+    func setupNavigationBar() {
+        saveButton = UIBarButtonItem(title: "Save".localized, style: .done, target: nil, action: nil)
+        navigationItem.rightBarButtonItem = saveButton
+    }
     
+    func setupTableView() {
+        
+        
+        
+    }
     
     
     

@@ -27,6 +27,10 @@ final class DefaultSettingsNavigator: SettingsNavigator {
     
     func toSettings() {
         
+        let viewModel = SettingsViewModel()
+        let settingsViewController = SettingsViewController()
+        settingsViewController.viewModel = viewModel
+        navigationController.pushViewController(settingsViewController, animated: true)
         
         
     }

@@ -22,6 +22,7 @@
 		7C6E28AD231B0D1300ACC4FC /* RxNavigationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6E28AC231B0D1300ACC4FC /* RxNavigationItem.swift */; };
 		7C6E28B0231BE68800ACC4FC /* Observables + Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6E28AF231BE68800ACC4FC /* Observables + Rx.swift */; };
 		7C6E28B2231BFA4300ACC4FC /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6E28B1231BFA4300ACC4FC /* TableViewController.swift */; };
+		7C70238D2357B23E00AAB6B2 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C70238C2357B23E00AAB6B2 /* SettingsViewModel.swift */; };
 		7C7E3A8423396ED6008557E2 /* Realm+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7E3A8323396ED6008557E2 /* Realm+Ext.swift */; };
 		7C8216A1231460DE003D9379 /* WalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8216A0231460DE003D9379 /* WalletViewController.swift */; };
 		7C867C332321A74B002D84C8 /* AddWalletUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C867C322321A74B002D84C8 /* AddWalletUseCase.swift */; };
@@ -84,6 +85,7 @@
 		7C6E28AC231B0D1300ACC4FC /* RxNavigationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxNavigationItem.swift; sourceTree = "<group>"; };
 		7C6E28AF231BE68800ACC4FC /* Observables + Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Observables + Rx.swift"; sourceTree = "<group>"; };
 		7C6E28B1231BFA4300ACC4FC /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		7C70238C2357B23E00AAB6B2 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		7C7E3A8323396ED6008557E2 /* Realm+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm+Ext.swift"; sourceTree = "<group>"; };
 		7C8216A0231460DE003D9379 /* WalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletViewController.swift; sourceTree = "<group>"; };
 		7C867C322321A74B002D84C8 /* AddWalletUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWalletUseCase.swift; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 			children = (
 				7CB2D0552357AE5200682F04 /* SettingsNavigator.swift */,
 				7CB2D0572357B03000682F04 /* SettingsViewController.swift */,
+				7C70238C2357B23E00AAB6B2 /* SettingsViewModel.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -580,6 +583,7 @@
 				7C6A753023566B1C00B4A5F8 /* CellSetupable.swift in Sources */,
 				7C6E28A3231AFFD800ACC4FC /* TableSection.swift in Sources */,
 				7C6E28722319AE8D00ACC4FC /* Row.swift in Sources */,
+				7C70238D2357B23E00AAB6B2 /* SettingsViewModel.swift in Sources */,
 				7C6E28B0231BE68800ACC4FC /* Observables + Rx.swift in Sources */,
 				7CECBECF22F386020081981D /* WalletsCollectionViewController.swift in Sources */,
 			);
