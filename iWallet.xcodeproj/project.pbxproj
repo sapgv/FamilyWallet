@@ -25,7 +25,12 @@
 		7C70238D2357B23E00AAB6B2 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C70238C2357B23E00AAB6B2 /* SettingsViewModel.swift */; };
 		7C7E3A8423396ED6008557E2 /* Realm+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7E3A8323396ED6008557E2 /* Realm+Ext.swift */; };
 		7C8216A1231460DE003D9379 /* WalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8216A0231460DE003D9379 /* WalletViewController.swift */; };
+		7C84BE092358F600004346E8 /* EditWalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C84BE082358F600004346E8 /* EditWalletViewController.swift */; };
+		7C84BE0B2358F620004346E8 /* EditWalletNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C84BE0A2358F620004346E8 /* EditWalletNavigator.swift */; };
+		7C84BE0D2358F62F004346E8 /* EditWalletViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C84BE0C2358F62F004346E8 /* EditWalletViewModel.swift */; };
+		7C84BE0F2358F63E004346E8 /* EditWalletUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C84BE0E2358F63E004346E8 /* EditWalletUseCase.swift */; };
 		7C867C332321A74B002D84C8 /* AddWalletUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C867C322321A74B002D84C8 /* AddWalletUseCase.swift */; };
+		7C8E08E82358FA15002364CA /* SettingsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8E08E72358FA15002364CA /* SettingsUseCase.swift */; };
 		7C94698A2313102E009936A8 /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9469892313102E009936A8 /* Application.swift */; };
 		7CA4CABC2318636B00EAB73E /* RightDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4CABA2318636B00EAB73E /* RightDetailCell.swift */; };
 		7CA4CABD2318636B00EAB73E /* RightDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7CA4CABB2318636B00EAB73E /* RightDetailCell.xib */; };
@@ -88,7 +93,12 @@
 		7C70238C2357B23E00AAB6B2 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		7C7E3A8323396ED6008557E2 /* Realm+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Realm+Ext.swift"; sourceTree = "<group>"; };
 		7C8216A0231460DE003D9379 /* WalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletViewController.swift; sourceTree = "<group>"; };
+		7C84BE082358F600004346E8 /* EditWalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWalletViewController.swift; sourceTree = "<group>"; };
+		7C84BE0A2358F620004346E8 /* EditWalletNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWalletNavigator.swift; sourceTree = "<group>"; };
+		7C84BE0C2358F62F004346E8 /* EditWalletViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWalletViewModel.swift; sourceTree = "<group>"; };
+		7C84BE0E2358F63E004346E8 /* EditWalletUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWalletUseCase.swift; sourceTree = "<group>"; };
 		7C867C322321A74B002D84C8 /* AddWalletUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWalletUseCase.swift; sourceTree = "<group>"; };
+		7C8E08E72358FA15002364CA /* SettingsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsUseCase.swift; sourceTree = "<group>"; };
 		7C9469892313102E009936A8 /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
 		7CA4CABA2318636B00EAB73E /* RightDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightDetailCell.swift; sourceTree = "<group>"; };
 		7CA4CABB2318636B00EAB73E /* RightDetailCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RightDetailCell.xib; sourceTree = "<group>"; };
@@ -199,10 +209,11 @@
 		7C6E28A6231B012800ACC4FC /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
-				7CB2D0542357AE3F00682F04 /* Settings */,
-				7CB2D0512357A81700682F04 /* Tabs */,
 				7C6E28AA231B03B900ACC4FC /* Wallets */,
 				7C6E28A7231B013500ACC4FC /* AddWallet */,
+				7C84BE072358F5DD004346E8 /* EditWallet */,
+				7CB2D0542357AE3F00682F04 /* Settings */,
+				7CB2D0512357A81700682F04 /* Tabs */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -221,7 +232,6 @@
 		7C6E28AA231B03B900ACC4FC /* Wallets */ = {
 			isa = PBXGroup;
 			children = (
-				7CE386AD2352666C00A13C58 /* UI */,
 				7CECBECE22F386020081981D /* WalletsCollectionViewController.swift */,
 				7CD30B64231F0AF00013C69B /* WalletsNavigator.swift */,
 				7CD30B66231F0DE80013C69B /* WalletsViewModel.swift */,
@@ -245,6 +255,17 @@
 				7C7E3A8323396ED6008557E2 /* Realm+Ext.swift */,
 			);
 			path = RealmExtensions;
+			sourceTree = "<group>";
+		};
+		7C84BE072358F5DD004346E8 /* EditWallet */ = {
+			isa = PBXGroup;
+			children = (
+				7C84BE082358F600004346E8 /* EditWalletViewController.swift */,
+				7C84BE0A2358F620004346E8 /* EditWalletNavigator.swift */,
+				7C84BE0C2358F62F004346E8 /* EditWalletViewModel.swift */,
+				7C84BE0E2358F63E004346E8 /* EditWalletUseCase.swift */,
+			);
+			path = EditWallet;
 			sourceTree = "<group>";
 		};
 		7CA4CABE2318639E00EAB73E /* Cell */ = {
@@ -277,6 +298,7 @@
 				7CB2D0552357AE5200682F04 /* SettingsNavigator.swift */,
 				7CB2D0572357B03000682F04 /* SettingsViewController.swift */,
 				7C70238C2357B23E00AAB6B2 /* SettingsViewModel.swift */,
+				7C8E08E72358FA15002364CA /* SettingsUseCase.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -335,13 +357,6 @@
 			isa = PBXGroup;
 			children = (
 				7CE1002D22F62A510078038E /* PickerView.swift */,
-			);
-			path = UI;
-			sourceTree = "<group>";
-		};
-		7CE386AD2352666C00A13C58 /* UI */ = {
-			isa = PBXGroup;
-			children = (
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -547,6 +562,7 @@
 				7CB2D0562357AE5300682F04 /* SettingsNavigator.swift in Sources */,
 				7CB31FD523551D0F005E53AA /* ActivityIndicator.swift in Sources */,
 				7CBBEA16234FD4460088016C /* CollectionItemBuilder.swift in Sources */,
+				7C84BE092358F600004346E8 /* EditWalletViewController.swift in Sources */,
 				7C6E28B2231BFA4300ACC4FC /* TableViewController.swift in Sources */,
 				7CECBED722F38FFE0081981D /* AddWalletViewController.swift in Sources */,
 				7CA4CABC2318636B00EAB73E /* RightDetailCell.swift in Sources */,
@@ -560,6 +576,7 @@
 				7CBBEA05234FC3340088016C /* Wallet.swift in Sources */,
 				7CECBEBB22F384930081981D /* ViewController.swift in Sources */,
 				7C6A75272356692400B4A5F8 /* PickedCell.swift in Sources */,
+				7C84BE0D2358F62F004346E8 /* EditWalletViewModel.swift in Sources */,
 				7C8216A1231460DE003D9379 /* WalletViewController.swift in Sources */,
 				7CD30B63231F05100013C69B /* AddWalletNavigator.swift in Sources */,
 				7CBBEA0B234FC3AD0088016C /* Operation.swift in Sources */,
@@ -570,6 +587,7 @@
 				7CBBEA12234FCF030088016C /* CollectionSection.swift in Sources */,
 				7CE1002E22F62A510078038E /* PickerView.swift in Sources */,
 				7CECBEB922F384930081981D /* AppDelegate.swift in Sources */,
+				7C8E08E82358FA15002364CA /* SettingsUseCase.swift in Sources */,
 				7C6E28A5231B007100ACC4FC /* TableView.swift in Sources */,
 				7CBBEA14234FCF8F0088016C /* CollectionItem.swift in Sources */,
 				7C6E28AD231B0D1300ACC4FC /* RxNavigationItem.swift in Sources */,
@@ -579,8 +597,10 @@
 				7CD30B69231F0F290013C69B /* ViewModelType.swift in Sources */,
 				7CD30B65231F0AF00013C69B /* WalletsNavigator.swift in Sources */,
 				7CBBEA1C234FDE070088016C /* TitleCollectionCell.swift in Sources */,
+				7C84BE0B2358F620004346E8 /* EditWalletNavigator.swift in Sources */,
 				7CECBEE122F394E30081981D /* TitleEditCell.swift in Sources */,
 				7C6A753023566B1C00B4A5F8 /* CellSetupable.swift in Sources */,
+				7C84BE0F2358F63E004346E8 /* EditWalletUseCase.swift in Sources */,
 				7C6E28A3231AFFD800ACC4FC /* TableSection.swift in Sources */,
 				7C6E28722319AE8D00ACC4FC /* Row.swift in Sources */,
 				7C70238D2357B23E00AAB6B2 /* SettingsViewModel.swift in Sources */,

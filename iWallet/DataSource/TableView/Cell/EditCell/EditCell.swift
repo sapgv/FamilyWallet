@@ -27,6 +27,7 @@ class EditCell: UITableViewCell, CellSetupable {
     }
     
     func setup(row: Row) {
+//        textField.text = row.value.value
         textField.placeholder = row.placeholder
         textField.rx.text.orEmpty.bind(to: row.value).disposed(by: disposedBag)
     }

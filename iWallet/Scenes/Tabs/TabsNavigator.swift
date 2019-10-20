@@ -32,8 +32,9 @@ final class DefaultTabsNavigator: TabsNavigator {
         walletsCollectionViewController.viewModel = walletsViewModel
         
         let settingsNavigator = DefaultSettingsNavigator(navigationController: navigationController, storyboard: storyboard)
-        let settingsViewController = SettingsViewController()
-        let settingsViewModel = SettingsViewModel()
+        let settingsViewController = SettingsViewController(style: .grouped)
+        let settingsUseCase = SettingsUseCase()
+        let settingsViewModel = SettingsViewModel(navigator: settingsNavigator, settingsUseCase: settingsUseCase)
         settingsViewController.viewModel = settingsViewModel
         
         

@@ -30,6 +30,28 @@ extension Reactive where Base: Realm {
         }
         
     }
+    
+    func delete<T: Object>(entity: T) -> Observable<Void> {
+        
+        return Observable.create { (observer) -> Disposable in
+            
+            do {
+                try self.base.write {
+                    self.base.delete(entity)
+                }
+                observer.onNext(())
+            }
+            catch {
+                observer.onError(error)
+            }
+            return Disposables.create()
+            
+        }
+                
+    }
+    
+    
+    
 //    func save<R: RealmRepresentable>(entity: R, update: Bool = true) -> Observable<Void> where R.RealmType: Object  {
 //        return Observable.create { observer in
 //            do {

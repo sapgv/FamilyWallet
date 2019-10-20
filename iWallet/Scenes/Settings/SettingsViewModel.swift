@@ -7,14 +7,36 @@
 //
 
 import Foundation
+import RxCocoa
 
 final class SettingsViewModel {
     
+    var navigator: SettingsNavigator!
+    var settingsUseCase: SettingsUseCase!
     
+    init(navigator: SettingsNavigator, settingsUseCase: SettingsUseCase) {
+        self.navigator = navigator
+        self.settingsUseCase = settingsUseCase
+    }
     
+    struct Input {
+        
+    }
     
+    struct Output {
+        let sections: Driver<[TableSection]>
+    }
     
-    
+    func transform(input: Input) -> Output {
+        
+        
+        let sections = settingsUseCase
+                .sections()
+                .asDriverOnErrorJustComplete()
+        
+        return Output(sections: sections)
+
+    }
     
     
 }

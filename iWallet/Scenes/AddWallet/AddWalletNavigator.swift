@@ -10,9 +10,7 @@ import Foundation
 import UIKit
 
 protocol AddWalletNavigator {
-    
     func toWallets()
-    
 }
 
 final class DefaultAddWalletNavigator: AddWalletNavigator {

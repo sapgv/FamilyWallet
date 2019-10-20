@@ -75,6 +75,11 @@ class WalletsCollectionViewController: UICollectionViewController, UICollectionV
         
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tabBarController?.navigationItem.rightBarButtonItem = createWalletButton
+    }
+    
     private func setupCollectionView() {
         
         collectionView.refreshControl = UIRefreshControl()
@@ -90,7 +95,7 @@ class WalletsCollectionViewController: UICollectionViewController, UICollectionV
     
     private func setupNavigationBar() {
         createWalletButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
-        navigationItem.rightBarButtonItem = createWalletButton
+        
     }
     
     private func bindUI() {

@@ -13,7 +13,7 @@ protocol WalletsNavigator {
     
     func wallets()
     func createWallet()
-    func toWallet(wallet: Wallet)
+    func toEditWallet(wallet: Wallet)
 }
 
 final class DefaultWalletsNavigator: WalletsNavigator {
@@ -48,7 +48,15 @@ final class DefaultWalletsNavigator: WalletsNavigator {
         navigationController.pushViewController(viewController, animated: true)
     }
     
-    func toWallet(wallet: Wallet) {
+    func toEditWallet(wallet: Wallet) {
+        
+        let navigator = DefaultEditWalletNavigator(navigationController: navigationController)
+        let useCase = EditWalletUseCase()
+        let viewModel = EditWalletViewModel(wallet: wallet, useCase: useCase, navigator: navigator)
+//        let vc = storyboard.instatiateViweController(from: EditWalletViewController.self)
+        let vc = EditWalletViewController(style: .grouped)
+        vc.viewModel = viewModel
+        navigationController.pushViewController(vc, animated: true)
         
     }
     

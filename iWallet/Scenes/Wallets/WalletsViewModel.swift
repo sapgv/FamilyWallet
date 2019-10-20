@@ -52,7 +52,7 @@ class WalletsViewModel: ViewModelType {
         let selected = input.selectWalletTrigger.withLatestFrom(wallets) { ip, wallets -> Wallet in
             return wallets[ip.row]
         }.do(onNext: { wallet in
-            self.navigator.toWallet(wallet: wallet)
+            self.navigator.toEditWallet(wallet: wallet)
         })
         
         let fetching = activityIndicator.asDriver()
